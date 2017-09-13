@@ -8,6 +8,7 @@ function BaseHandler(req){
 }
 
 BaseHandler.prototype.getEvent = async function(){
+  console.log(this.event)
   try{
     return await db.sequelize.transaction(async function(t){
       let event = await db.Event.findOne({
