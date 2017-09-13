@@ -1,7 +1,8 @@
 let BaseHandler = require('./BaseHandler');
 
 function NewMessage(req){
-  BaseHandler.apply(this, arguments)
+  BaseHandler.apply(this, arguments);
+  this.chat_id = this.data.chat_id
 }
 
 NewMessage.prototype = Object.create(BaseHandler.prototype);

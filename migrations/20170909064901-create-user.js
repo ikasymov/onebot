@@ -8,8 +8,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      last_method: {
-        type: Sequelize.STRING
+      message_update: {
+        type: Sequelize.STRING,
+        defaults: 'defaultMethod'
+      },
+      new_chat: {
+        type: Sequelize.STRING,
+        defaults: 'defaultMethod'
+      },
+      new_message: {
+        type: Sequelize.STRING,
+        defaults: 'defaultMethod'
+      },
+      user_follow: {
+        type: Sequelize.STRING,
+        defaults: 'defaultMethod'
+      },
+      user_unfollow: {
+        type: Sequelize.STRING,
+        defaults: 'defaultMethod'
       },
       sender_id: {
         type: Sequelize.INTEGER,

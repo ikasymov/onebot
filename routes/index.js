@@ -7,12 +7,26 @@ let NewChat = require('../methods/NewChat');
 let UserUnfollow = require('../methods/UserUnfollow');
 let UserFollow = require('../methods/UserFollow');
 
-/* GET home page. */
+NewMessage.prototype.hellowWorld = async function(){
+  await this.sendMessage('Hello world');
+  return 'hi'
+};
+
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-MessageUpdate.prototype.hello = async function(){
-  console.log('hello world')
+let eventList = {
+  'message/new': NewMessage,
+  'message/update': MessageUpdate,
+  'user/follow': UserFollow,
+  'user/unfollow': UserUnfollow,
+  'chat/new': NewChat
 };
 
+router.post('/', async function(req, res, next){
+  let object = new eventList[req.body.event](req);
+  await object.start()
+});
+
+module.exports = router;

@@ -1,7 +1,23 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('User', {
-    last_method: {
+    message_update: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    new_chat: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    new_message: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    user_follow: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    user_unfollow: {
       type: DataTypes.STRING,
       allowNull: true
     },

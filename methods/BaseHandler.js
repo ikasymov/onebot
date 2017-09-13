@@ -7,7 +7,6 @@ function BaseHandler(req){
   this.event = req.body.event
 }
 
-
 BaseHandler.prototype.getEvent = async function(){
   try{
     let event = await db.Event.findOne({
@@ -24,7 +23,7 @@ BaseHandler.prototype.getEvent = async function(){
   }
 };
 
-BaseHandler.prototype.getSenderId = function(){
+BaseHandler.prototype._getSenderId = function(){
   if(this.event === 'message/new' || this.event === 'update/message'){
     return this.data.sender_id
   }else if(this.event === 'user/follow' || this.event === 'user/unfollow'){
@@ -37,65 +36,47 @@ BaseHandler.prototype.getSenderId = function(){
 BaseHandler.prototype.getUser = async function(){
   try{
     let user = await db.User.findOne({
-      sender_id: this.getSenderId()
+      sender_id: this._getSenderId()
     });
     if(user === null){
-      throw new Error('not found user id getUser method')
+      throw new Error('not found user in getUser method')
     }
     return user
   }catch(e){
     throw e
   }
-}
+};
 
-BaseHandler.prototype.getCurrentLastMethod = async function(){
+BaseHandler.prototype._getCurrentLastMethod = async function(){
   try{
     let user = this.getUser();
     let event = await this.getEvent();
-    let lastMethod = await db.Method.findOne({
-      where:{
-        last: true,
-        user_id: user.id,
-        event_id: event.id
-      }
-    });
-    if(lastMethod === null){
-      return {name: 'defaultMethod'}
-    }
+    return user[event.field_name];
   }catch(e){
     throw e
   }
 };
 
-BaseHandler.prototype.saveFollowMethod = async function(){
-  try{
-    let currentMethod = await this.getCurrentLastMethod();
+BaseHandler.prototype._saveFollowMethod = async function(){
+  try {
+    let lastMethod = this._getCurrentLastMethod();
+    let listOfMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
+    let index = listOfMethods.indexOf(lastMethod);
+    if(index === -1){
+      console.log('not found method');
+      return lastMethod
+    }
     let user = this.getUser();
     let event = this.getEvent();
-    let method = await db.Method.findAll({
-      where:{
-        user_id: user.id,
-        event_id: event.id
-      },
-      raw: true
-    });
-    let filteringMethod = method.filter(item=>{
-      if(item.id === currentMethod.id){
-        return item
-      }
-    });
-    if(filteringMethod.length > 0){
-      let currentMethodIndex = method.indexOf(filteringMethod[0]);
-      if (currentMethodIndex === -1){
-        console.log('not next methods');
-        return currentMethod
-      }
-      let objectForUpdate = method[currentMethodIndex + 1];
-      if(objectForUpdate === undefined){
-        return currentMethod
-      }
-      return objectForUpdate.update({last: true});
+    let field_name = event.field_name;
+    let secondMethod = listOfMethods[index + 1];
+    if(secondMethod === undefined){
+      console.log('not found last method');
+      return lastMethod
     }
+    user[field_name] = secondMethod;
+    await user.save();
+    return user[field_name]
   }catch(e){
     throw e
   }
@@ -128,9 +109,9 @@ BaseHandler.prototype.sendMessage = async function(message){
 
 BaseHandler.prototype.start = async function(){
   try{
-    let lastMethod = await this.getCurrentLastMethod();
-    await this[lastMethod.name]();
-    await this.saveFollowMethod();
+    let lastMethod = await this._getCurrentLastMethod();
+    await this[lastMethod]();
+    await this._saveFollowMethod();
     return 'ok'
   }catch(e){
     throw e
