@@ -8,7 +8,6 @@ function BaseHandler(req){
 }
 
 BaseHandler.prototype.getEvent = async function(){
-  console.log(this.event)
   try{
       let event = await db.Event.findOne({
         where:{
@@ -52,10 +51,9 @@ BaseHandler.prototype.getUser = async function(){
 
 BaseHandler.prototype._getCurrentLastMethod = async function(){
   try{
-    let user = this.getUser();
+    let user = await this.getUser();
     let event = await this.getEvent();
-    console.log(event.field_name);
-    console.log(user.new_message)
+    console.log(user.new_message);
     return user[event.field_name];
   }catch(e){
     throw e
@@ -64,15 +62,15 @@ BaseHandler.prototype._getCurrentLastMethod = async function(){
 
 BaseHandler.prototype._saveFollowMethod = async function(){
   try {
-    let lastMethod = this._getCurrentLastMethod();
+    let lastMethod = await this._getCurrentLastMethod();
     let listOfMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
     let index = listOfMethods.indexOf(lastMethod);
     if(index === -1){
       console.log('not found method');
       return lastMethod
     }
-    let user = this.getUser();
-    let event = this.getEvent();
+    let user = await this.getUser();
+    let event = await this.getEvent();
     let field_name = event.field_name;
     let secondMethod = listOfMethods[index + 1];
     if(secondMethod === undefined){
