@@ -10,18 +10,15 @@ function BaseHandler(req){
 BaseHandler.prototype.getEvent = async function(){
   console.log(this.event)
   try{
-    return await db.sequelize.transaction(async function(t){
       let event = await db.Event.findOne({
         where:{
           event_name: this.event
         }
-      }, {transaction: t});
+      });
       if(event === null){
         throw new Error('not found event in getEvent method')
       }
       return event
-    });
-    
   }catch(e){
     throw e
   }
