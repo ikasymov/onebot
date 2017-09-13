@@ -12,6 +12,10 @@ NewMessage.prototype.hellowWorld = async function(){
   return 'hi'
 };
 
+NewMessage.prototype.secondMessage = async function(){
+  await this.secondMessage('secondMessage')
+};
+
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
