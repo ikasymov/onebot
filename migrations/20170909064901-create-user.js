@@ -30,6 +30,7 @@ module.exports = {
       },
       sender_id: {
         type: Sequelize.INTEGER,
+        unique: true
       },
       created_at: {
         allowNull: false,
