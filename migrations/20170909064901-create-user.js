@@ -10,23 +10,23 @@ module.exports = {
       },
       message_update: {
         type: Sequelize.STRING,
-        defaults: 'defaultMethod'
+        defaultValue: 'defaultMethod'
       },
       new_chat: {
         type: Sequelize.STRING,
-        defaults: 'defaultMethod'
+        defaultValue: 'defaultMethod'
       },
       new_message: {
         type: Sequelize.STRING,
-        defaults: 'defaultMethod'
+        defaultValue: 'defaultMethod'
       },
       user_follow: {
         type: Sequelize.STRING,
-        defaults: 'defaultMethod'
+        defaultValue: 'defaultMethod'
       },
       user_unfollow: {
         type: Sequelize.STRING,
-        defaults: 'defaultMethod'
+        defaultValue: 'defaultMethod'
       },
       sender_id: {
         type: Sequelize.INTEGER,
