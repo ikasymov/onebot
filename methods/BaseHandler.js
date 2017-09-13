@@ -11,7 +11,7 @@ BaseHandler.prototype.getEvent = async function(){
   try{
     let event = await db.Event.findOne({
       where:{
-        name: this.event
+        event_name: this.event
       }
     });
     if(event === null){
