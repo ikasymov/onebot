@@ -34,15 +34,16 @@ BaseHandler.prototype._getSenderId = function(){
 };
 
 BaseHandler.prototype.getUser = async function(){
-  console.log(this._getSenderId());
   try{
-    let user = await db.User.findOne({
-      sender_id: this._getSenderId()
+    let user = await db.User.findOrCreate({
+      where: {
+        sender_id: this._getSenderId()
+      },
+      defaults: {
+        sender_id: this._getSenderId()
+      }
     });
-    if(user === null){
-      throw new Error('not found user in getUser method')
-    }
-    return user
+    return user[0];
   }catch(e){
     throw e
   }
