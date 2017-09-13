@@ -9,15 +9,18 @@ UserFollow.prototype.constructor = UserFollow;
 
 UserFollow.prototype.defaultMethod = async function(){
   try{
-    let user = await db.User.findOrCreate({
-      where: {
-        sender_id: this._getSenderId()
-      },
-      defaults: {
-        sender_id: this._getSenderId()
-      }
-    });
-    return user[0]
+    await db.sequelize.transaction(async function(t){
+      let user = await db.User.findOrCreate({
+        where: {
+          sender_id: this._getSenderId()
+        },
+        defaults: {
+          sender_id: this._getSenderId()
+        }
+      }, {transaction: t});
+      return user[0]
+    })
+    
   }catch(e){
     throw e
   }
