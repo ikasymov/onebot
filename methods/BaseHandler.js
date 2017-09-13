@@ -112,6 +112,8 @@ BaseHandler.prototype.sendMessage = async function(message){
 BaseHandler.prototype.start = async function(){
   try{
     let lastMethod = await this._getCurrentLastMethod();
+    console.log(lastMethod);
+    
     await this[lastMethod]();
     await this._saveFollowMethod();
     return 'ok'
