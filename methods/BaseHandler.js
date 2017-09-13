@@ -34,6 +34,7 @@ BaseHandler.prototype._getSenderId = function(){
 };
 
 BaseHandler.prototype.getUser = async function(){
+  console.log(this._getSenderId());
   try{
     let user = await db.User.findOne({
       sender_id: this._getSenderId()
