@@ -68,6 +68,7 @@ BaseHandler.prototype._saveFollowMethod = async function(){
   try {
     let lastMethod = await this._getCurrentLastMethod();
     let listOfMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
+    console.log(listOfMethods);
     let index = listOfMethods.indexOf(lastMethod);
     if(index === -1){
       console.log('not found method');
