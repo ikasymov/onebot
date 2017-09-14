@@ -13,7 +13,7 @@ NewMessage.prototype.hellowWorld = async function(){
 };
 
 NewMessage.prototype.secondMessage = async function(){
-  await this.secondMessage('secondMessage')
+  await this.sendMessage('secondMessage')
 };
 
 router.get('/', function(req, res, next) {
