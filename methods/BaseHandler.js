@@ -24,7 +24,7 @@ BaseHandler.prototype.getEvent = async function(){
 };
 
 BaseHandler.prototype._getSenderId = function(){
-  if(this.event === 'message/new' || this.event === 'update/message'){
+  if(this.event === 'message/new' || this.event === 'message/update'){
     return this.data.sender_id
   }else if(this.event === 'user/follow' || this.event === 'user/unfollow'){
     return this.data.id
