@@ -30,7 +30,8 @@ let eventList = {
 
 router.post('/', async function(req, res, next){
   let object = new eventList[req.body.event](req);
-  await object.start()
+  await object.start();
+  res.end()
 });
 
 module.exports = router;

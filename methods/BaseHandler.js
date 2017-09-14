@@ -57,7 +57,6 @@ BaseHandler.prototype._getCurrentLastMethod = async function(){
   try{
     let user = await this.getUser();
     let event = await this.getEvent();
-    console.log(user.new_message);
     return user[event.field_name];
   }catch(e){
     throw e
