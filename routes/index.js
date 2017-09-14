@@ -8,12 +8,12 @@ let UserUnfollow = require('../methods/UserUnfollow');
 let UserFollow = require('../methods/UserFollow');
 
 NewMessage.prototype.hellowWorld = async function(){
-  await this.sendMessage('Hello world');
-  return 'hi'
+  return await this.sendMessage('Hello world');
 };
 
 NewMessage.prototype.secondMessage = async function(){
-  await this.sendMessage('secondMessage')
+  
+  return await this.sendMessage('secondMessage')
 };
 
 router.get('/', function(req, res, next) {

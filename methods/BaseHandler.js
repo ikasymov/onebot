@@ -80,7 +80,7 @@ BaseHandler.prototype._saveFollowMethod = async function(){
     if(secondMethod === undefined){
       console.log('not found last method');
       console.log(this.event);
-      console.log(listOfMethods);
+      console.log(listOfMethods[2]);
       return listOfMethods[2]
     }
     user[field_name] = secondMethod;
