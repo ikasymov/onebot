@@ -34,7 +34,10 @@ BaseHandler.prototype._getSenderId = function(){
 };
 
 BaseHandler.prototype.getUser = async function(){
-  console.log(this._getSenderId())
+  if(this._getSenderId() === undefined){
+    console.log(this.event)
+    console.log(this.data)
+  }
   try{
     let user = await db.User.findOrCreate({
       where: {
