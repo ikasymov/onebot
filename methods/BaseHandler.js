@@ -82,7 +82,7 @@ BaseHandler.prototype._saveFollowMethod = async function(){
       console.log("NOT FOUND NEXT METHOD");
       let funcWithoutConst = listOfMethods.slice(1)[0];
       if(funcWithoutConst.length > 0){
-        user[field_name] = funcWithoutConst[0];
+        user[field_name] = funcWithoutConst;
         await user.save();
         return true
       }
