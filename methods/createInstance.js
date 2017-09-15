@@ -28,6 +28,7 @@ async function createInstanceAndStart(req){
   currentClass.prototype = Object.create(BaseHandler.prototype);
   currentClass.prototype = dict;
   let object = new currentClass(req);
+  console.log(currentClass)
   return await object.start();
 }
 
