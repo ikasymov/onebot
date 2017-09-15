@@ -63,6 +63,7 @@ BaseHandler.prototype._getCurrentLastMethod = async function(){
   }
 };
 
+
 BaseHandler.prototype._saveFollowMethod = async function(){
   try {
     let lastMethod = await this._getCurrentLastMethod();
@@ -70,22 +71,26 @@ BaseHandler.prototype._saveFollowMethod = async function(){
     console.log(listOfMethods);
     let index = listOfMethods.indexOf(lastMethod);
     if(index === -1){
-      console.log('not found method');
-      return lastMethod
+      console.log('NOT FOUND METHOD');
+      return false
     }
     let user = await this.getUser();
     let event = await this.getEvent();
     let field_name = event.field_name;
     let secondMethod = listOfMethods[index + 1];
     if(secondMethod === undefined){
-      console.log('not found last method');
-      console.log(this.event);
-      console.log(listOfMethods[2]);
-      return listOfMethods[2]
+      console.log("NOT FOUND NEXT METHOD");
+      let funcWithoutConst = listOfMethods.slice(1)[0];
+      if(funcWithoutConst.length > 0){
+        user[field_name] = funcWithoutConst[0];
+        await user.save();
+        return true
+      }
+      return false
     }
     user[field_name] = secondMethod;
     await user.save();
-    return user[field_name]
+    return true
   }catch(e){
     throw e
   }
@@ -116,10 +121,21 @@ BaseHandler.prototype.sendMessage = async function(message){
   })
 };
 
+BaseHandler.prototype._callFunction = async function(methodName){
+  try{
+    await this[methodName](this)
+  }catch(e){
+    if(e instanceof TypeError){
+      console.log('NOT FOUND THIS METHOD IN YOU FUNCTIONS LIST');
+      throw e
+    }
+  }
+};
+
 BaseHandler.prototype.start = async function(){
   try{
     let lastMethod = await this._getCurrentLastMethod();
-    await this[lastMethod]();
+    await this._callFunction(lastMethod);
     await this._saveFollowMethod();
     return 'ok'
   }catch(e){
