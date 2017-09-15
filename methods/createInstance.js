@@ -17,8 +17,6 @@ let eventList = {
 async function createInstanceAndStart(req){
   let currentEvent = req.body.event;
   let currentClass = eventList[currentEvent];
-  console.log(currentClass)
-  console.log("hello")
   let currentEventPrototypes = functions[currentEvent];
   let dict = {
     constructor: currentClass
@@ -30,6 +28,7 @@ async function createInstanceAndStart(req){
   currentClass.prototype = Object.create(BaseHandler.prototype);
   currentClass.prototype = dict;
   let object = new currentClass(req);
+  Object.getOwnPropertyNames(Object.getPrototypeOf(object))
   return await object.start();
 }
 
