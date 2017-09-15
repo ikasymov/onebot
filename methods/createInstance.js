@@ -3,8 +3,9 @@ let NewMessage = require('./NewMessage');
 let NewChat = require('./NewChat');
 let UserUnfollow = require('./UserUnfollow');
 let UserFollow = require('./UserFollow');
-let BaseHandler = require('./BaseHandler');
-let functions = require('../functions');
+let func = require('../functions');
+
+console.log(func);
 
 let eventList = {
   'message/new': NewMessage,
@@ -17,19 +18,7 @@ let eventList = {
 async function createInstanceAndStart(req){
   let currentEvent = req.body.event;
   let currentClass = eventList[currentEvent];
-  let currentEventPrototypes = functions[currentEvent];
-  let dict = {
-    constructor: currentClass
-  };
-  for (let i in currentEventPrototypes){
-    let object = currentEventPrototypes[i];
-    dict[object.name] = object;
-  }
-  currentClass.prototype = Object.create(BaseHandler.prototype);
-  console.log(dict)
-  currentClass.prototype = dict;
   let object = new currentClass(req);
-  Object.getOwnPropertyNames(Object.getPrototypeOf(object))
   return await object.start();
 }
 
