@@ -13,8 +13,13 @@ router.get('/logs', function(req, res, next) {
 });
 
 router.post('/', async function(req, res, next){
-  await instance(req);
-  res.end()
+  try{
+    await instance(req);
+    res.end()
+  }catch(e){
+    console.log(e.message)
+  }
+  
 });
 
 module.exports = router;

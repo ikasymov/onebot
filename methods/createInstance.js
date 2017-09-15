@@ -16,10 +16,15 @@ let eventList = {
 };
 
 async function createInstanceAndStart(req){
-  let currentEvent = req.body.event;
-  let currentClass = eventList[currentEvent];
-  let object = new currentClass(req);
-  return await object.start();
+  try{
+    let currentEvent = req.body.event;
+    let currentClass = eventList[currentEvent];
+    let object = new currentClass(req);
+    return await object.start();
+  }catch(e){
+    throw e
+  }
+  
 }
 
 module.exports = createInstanceAndStart;

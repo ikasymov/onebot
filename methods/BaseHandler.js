@@ -126,8 +126,7 @@ BaseHandler.prototype._callFunction = async function(methodName){
     await this[methodName](this)
   }catch(e){
     if(e instanceof TypeError){
-      console.log('NOT FOUND THIS METHOD IN YOU FUNCTIONS LIST');
-      throw e
+      throw new Error('NOT FOUND THIS METHOD IN YOU FUNCTIONS LIST')
     }
   }
 };
