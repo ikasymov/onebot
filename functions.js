@@ -4,7 +4,7 @@ let NewChat = require('./methods/NewChat');
 let UserUnfollow = require('./methods/UserUnfollow');
 let UserFollow = require('./methods/UserFollow');
 
-NewMessage.prototype.checkFirstFunc = async function(){
+NewMessage.prototype.secondMessage = async function(){
   await this.sendMessage('first Message')
 };
 
