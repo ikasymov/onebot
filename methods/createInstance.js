@@ -26,6 +26,7 @@ async function createInstanceAndStart(req){
     dict[object.name] = object;
   }
   currentClass.prototype = Object.create(BaseHandler.prototype);
+  console.log(dict)
   currentClass.prototype = dict;
   let object = new currentClass(req);
   Object.getOwnPropertyNames(Object.getPrototypeOf(object))
