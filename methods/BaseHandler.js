@@ -153,7 +153,6 @@ BaseHandler.prototype.setLastMethod = async function(){
 BaseHandler.prototype.start = async function(){
   try{
     let lastMethod = await this._getCurrentLastMethod();
-    console.log(this._getListOfMethods());
     await this._callFunction(lastMethod);
     await this._saveFollowMethod();
     return 'ok'
