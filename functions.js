@@ -4,7 +4,8 @@ let UserUnfollow = require('./methods/UserUnfollow');
 let UserFollow = require('./methods/UserFollow');
 
 NewMessage.prototype.secondMessage = async function(){
-  await this.sendMessage('first Message')
+  let token = await this.saveImageEndReturnToken('https://geographyofrussia.com/wp-content/uploads/2014/11/20-21.jpg');
+  await this.sendMessage('first Message', [token])
 };
 
 
