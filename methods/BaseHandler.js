@@ -174,6 +174,7 @@ BaseHandler.prototype.sendImage = function (token) {
       if (error){
         rejected(error)
       }
+      console.log(body)
       resolve(body)
     });
   });
