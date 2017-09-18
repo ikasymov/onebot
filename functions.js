@@ -8,9 +8,6 @@ NewMessage.prototype.secondMessage = async function(){
   await this.sendMessage('first Message')
 };
 
-MessageUpdate.prototype.check = async function(){
-  await this.sendMessage('update')
-}
 
 
 module.exports = {
