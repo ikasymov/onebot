@@ -1,6 +1,8 @@
 let db = require('../models');
 let config = require('../config');
 let request = require('request');
+let download = require('image-downloader');
+let superagent = require('superagent');
 
 function BaseHandler(req){
   this.data = req.body.data;
@@ -110,8 +112,48 @@ BaseHandler.prototype._saveFollowMethod = async function(){
   }
 };
 
+function deleteFile(path){
+  return new Promise((resolve, reject)=>{
+    fs.unlink(path, function (error) {
+      if(error){
+        reject(error)
+      }
+      resolve()
+    })
+  });
+}
+
+BaseHandler.prototype.saveImageEndReturnToken = async function(imgUrl){
+  let format = imgUrl.match(/\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/gmi)[0];
+  imgUrl = imgUrl.split('.').slice(0, -1).join('.') + format;
+  return new Promise((resolve, reject)=> {
+    const options = {
+      url: imgUrl,
+      dest: './'
+    };
+    download.image(options).then(({filename, image}) => {
+      let file = './'+ filename;
+      superagent.post('https://files.namba1.co').attach('file', file).end(function(err, req) {
+        if(err){
+          deleteFile(filename);
+          reject(err)
+        }
+        deleteFile(file).then(result=>{
+          resolve(req.body.file)
+        })
+      })
+    }).catch(e => {
+      console.log(e);
+      console.log('error download image');
+      reject(e)
+    })
+    setTimeout(()=>{
+      reject(new Error('time out'))
+    }, 10000)
+  })
+};
 //Нужен this.chat_id от nambaone
-BaseHandler.prototype.sendMessage = async function(message){
+BaseHandler.prototype.sendMessage = async function(message, img){
   let data = {
     url: config.apiUrl + '/chats/' + this.chat_id + '/write',
     method: 'POST',
@@ -124,6 +166,12 @@ BaseHandler.prototype.sendMessage = async function(message){
     },
     json: true
   };
+  if(img){
+    data.body['attachments'] = [{
+      type: 'media/image',
+      content: img
+    }]
+  }
   return new Promise((resolve, reject)=>{
     request(data, (error, req, body)=>{
       if(error){
@@ -144,10 +192,6 @@ BaseHandler.prototype._callFunction = async function(methodName){
       throw new Error('NOT FOUND "' + user[event.field_name] +'" FUNCTION IN YOU ' + event.event_name + ' FUNCTION LIST')
     }
   }
-};
-
-BaseHandler.prototype.setLastMethod = async function(){
-
 };
 
 BaseHandler.prototype.start = async function(){

@@ -11,11 +11,13 @@
     "debug": "~2.6.3",
     "express": "~4.15.2",
     "hbs": "~4.0.1",
+    "image-downloader": "^3.2.2",
     "morgan": "~1.8.1",
     "mysql2": "^1.4.2",
     "request": "^2.81.0",
     "sequelize": "^4.8.2",
     "sequelize-cli": "^3.0.0-0",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "superagent": "^3.6.0"
   }
 }
