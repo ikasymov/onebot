@@ -8,7 +8,9 @@ db.Event.bulkCreate([
   {event_name: 'user/unfollow', field_name: 'user_unfollow'},
   {event_name: 'chat/new', field_name: 'new_chat'},
 ]).then(result=>{
+  process.exit();
   console.log(result)
 }).catch(e=>{
+  process.exit();
   console.log(e)
 })

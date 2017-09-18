@@ -140,7 +140,7 @@ BaseHandler.prototype._callFunction = async function(methodName){
     if(e instanceof TypeError){
       let user = await this.getUser();
       let event = await this.getEvent();
-      throw new Error('NOT FOUND THIS ' + user[event.field_name] +' IN YOU ' + event.event_name + ' function list')
+      throw new Error('NOT FOUND "' + user[event.field_name] +'" FUNCTION IN YOU ' + event.event_name + 'FUNCTION LIST')
     }
   }
 };
