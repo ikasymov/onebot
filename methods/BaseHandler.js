@@ -172,6 +172,7 @@ BaseHandler.prototype.sendImage = function (token) {
     
     request(data, function (error, res, body) {
       if (error){
+        console.log(error)
         rejected(error)
       }
       console.log(body)
