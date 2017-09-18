@@ -3,6 +3,7 @@ let config = require('../config');
 let request = require('request');
 let download = require('image-downloader');
 let superagent = require('superagent');
+let fs = require('fs');
 
 function BaseHandler(req){
   this.data = req.body.data;
