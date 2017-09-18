@@ -30,9 +30,5 @@ module.exports = function(sequelize, DataTypes) {
     hooks: {},
     timestamps:false
   });
-  
-  User.associate = function(models){
-    this.hasMany(models.Method, {foreignKey: 'user_id'})
-  };
   return User;
 };

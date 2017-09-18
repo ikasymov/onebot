@@ -12,9 +12,5 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     timestamps: false
   });
-  
-  Event.associate = function(models){
-    this.hasMany(models.Method, {foreignKey: 'event_id'})
-  };
   return Event;
 };

@@ -34,10 +34,6 @@ BaseHandler.prototype._getSenderId = function(){
 };
 
 BaseHandler.prototype.getUser = async function(){
-  if(this._getSenderId() === undefined){
-    console.log(this.event)
-    console.log(this.data)
-  }
   try{
     let user = await db.User.findOrCreate({
       where: {
@@ -63,30 +59,47 @@ BaseHandler.prototype._getCurrentLastMethod = async function(){
   }
 };
 
+BaseHandler.prototype._getListOfMethods = function(){
+  return Object.getOwnPropertyNames(Object.getPrototypeOf(this));
+};
+
+
+BaseHandler.prototype._getSecondMethod = async function(){
+  try{
+    let lastMethod = await this._getCurrentLastMethod();
+    let methods = this._getListOfMethods();
+    let index = methods.indexOf(lastMethod);
+    if(index === -1){
+      throw new Error('NOT FOUND METHOD')
+    }
+    return methods[index + 1];
+  }catch(e){
+    throw e
+  }
+};
+
+BaseHandler.prototype.saveToFirstMethod = async function(methods){
+  let user = await this.getUser();
+  let event = await this.getEvent();
+  let methodListWithoutConstructor = methods.slice(1)[0];
+  if(methodListWithoutConstructor.length > 0){
+    user[event.field_name] = methodListWithoutConstructor;
+    await user.save();
+    return true
+  }
+  throw new Error('not method in list without constructor')
+};
+
 
 BaseHandler.prototype._saveFollowMethod = async function(){
   try {
-    let lastMethod = await this._getCurrentLastMethod();
-    let listOfMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
-    console.log(listOfMethods);
-    let index = listOfMethods.indexOf(lastMethod);
-    if(index === -1){
-      console.log('NOT FOUND METHOD');
-      return false
-    }
     let user = await this.getUser();
     let event = await this.getEvent();
     let field_name = event.field_name;
-    let secondMethod = listOfMethods[index + 1];
+    let secondMethod = await this._getSecondMethod();
     if(secondMethod === undefined){
-      console.log("NOT FOUND NEXT METHOD");
-      let funcWithoutConst = listOfMethods.slice(1)[0];
-      if(funcWithoutConst.length > 0){
-        user[field_name] = funcWithoutConst;
-        await user.save();
-        return true
-      }
-      return false
+      await this.saveToFirstMethod();
+      return true
     }
     user[field_name] = secondMethod;
     await user.save();
@@ -115,7 +128,6 @@ BaseHandler.prototype.sendMessage = async function(message){
       if(error){
         reject(error)
       }
-      console.log('send message');
       resolve(body)
     })
   })
@@ -128,9 +140,13 @@ BaseHandler.prototype._callFunction = async function(methodName){
     if(e instanceof TypeError){
       let user = await this.getUser();
       let event = await this.getEvent();
-      throw new Error('NOT FOUND THIS ' + user[event.field_name] +' IN YOU functions.js')
+      throw new Error('NOT FOUND THIS ' + user[event.field_name] +' IN YOU ' + event.event_name + ' function list')
     }
   }
+};
+
+BaseHandler.prototype.setLastMethod = async function(){
+
 };
 
 BaseHandler.prototype.start = async function(){
