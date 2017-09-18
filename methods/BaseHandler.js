@@ -9,15 +9,15 @@ function BaseHandler(req){
 
 BaseHandler.prototype.getEvent = async function(){
   try{
-      let event = await db.Event.findOne({
-        where:{
-          event_name: this.event
-        }
-      });
-      if(event === null){
-        throw new Error('not found event in getEvent method')
+    let event = await db.Event.findOne({
+      where:{
+        event_name: this.event
       }
-      return event
+    });
+    if(event === null){
+      throw new Error('not found event in getEvent method')
+    }
+    return event
   }catch(e){
     throw e
   }
@@ -140,7 +140,7 @@ BaseHandler.prototype._callFunction = async function(methodName){
     if(e instanceof TypeError){
       let user = await this.getUser();
       let event = await this.getEvent();
-      throw new Error('NOT FOUND "' + user[event.field_name] +'" FUNCTION IN YOU ' + event.event_name + 'FUNCTION LIST')
+      throw new Error('NOT FOUND "' + user[event.field_name] +'" FUNCTION IN YOU ' + event.event_name + ' FUNCTION LIST')
     }
   }
 };
@@ -152,6 +152,7 @@ BaseHandler.prototype.setLastMethod = async function(){
 BaseHandler.prototype.start = async function(){
   try{
     let lastMethod = await this._getCurrentLastMethod();
+    console.log(this._getListOfMethods());
     await this._callFunction(lastMethod);
     await this._saveFollowMethod();
     return 'ok'
