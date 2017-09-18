@@ -78,9 +78,10 @@ BaseHandler.prototype._getSecondMethod = async function(){
   }
 };
 
-BaseHandler.prototype.saveToFirstMethod = async function(methods){
+BaseHandler.prototype.saveToFirstMethod = async function(){
   let user = await this.getUser();
   let event = await this.getEvent();
+  let methods = await this._getListOfMethods();
   let methodListWithoutConstructor = methods.slice(1)[0];
   if(methodListWithoutConstructor.length > 0){
     user[event.field_name] = methodListWithoutConstructor;
