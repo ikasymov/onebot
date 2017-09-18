@@ -153,8 +153,34 @@ BaseHandler.prototype.saveImageEndReturnToken = async function(imgUrl){
     }, 10000)
   })
 };
+
+BaseHandler.prototype.sendImage = function (token) {
+  return new Promise(function (resolve, rejected) {
+    let url = config.apiUrl + '/chats/' + this.chat_id + '/write';
+    let data = {
+      url: url,
+      method: 'POST',
+      body: {
+        'type': 'media/image',
+        'content': token
+      },
+      headers: {
+        'X-Namba-Auth-Token': config.token
+      },
+      json: true
+    };
+    
+    request(data, function (error, res, body) {
+      if (error){
+        rejected(error)
+      }
+      resolve(body)
+    });
+  });
+};
+
 //Нужен this.chat_id от nambaone
-BaseHandler.prototype.sendMessage = async function(message, img){
+BaseHandler.prototype.sendMessage = async function(message){
   let data = {
     url: config.apiUrl + '/chats/' + this.chat_id + '/write',
     method: 'POST',
@@ -167,12 +193,7 @@ BaseHandler.prototype.sendMessage = async function(message, img){
     },
     json: true
   };
-  if(img){
-    data.body['attachments'] = [{
-      type: 'media/image',
-      content: img
-    }]
-  }
+  
   return new Promise((resolve, reject)=>{
     request(data, (error, req, body)=>{
       if(error){
